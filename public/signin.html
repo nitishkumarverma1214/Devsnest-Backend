@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <h2>Sign In</h2>
+      <form method="POST" id="signin">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" />
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" />
+
+        <button>Sign in</button>
+      </form>
+    </div>
+    <a href="./signup.html">Sign up</a>
+  </body>
+  <script>
+    const email = document.querySelector("#email");
+    const passwd = document.querySelector("#password");
+
+    const form = document.querySelector("#signin");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = {
+        email: email.value,
+        password: passwd.value,
+      };
+      const request = await fetch("/api/v1/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        crossDomain: true,
+        body: JSON.stringify(user),
+      });
+      const message = await request.text();
+      console.log("message:", message);
+      alert(message);
+    });
+  </script>
+</html>
