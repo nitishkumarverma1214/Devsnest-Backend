@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL shortener</title>
+  </head>
+  <body>
+    <input class="url-input" type="text" placeholder="Enter the url" />
+    <button class="shorten-btn">Shorten</button>
+    <p id="short-url"><a href="" target="_blank"></a></p>
+    <script>
+      const shortenButton = document.querySelector(".shorten-btn");
+
+      const inputBox = document.querySelector(".url-input");
+      const shortUrlBox = document.querySelector("#short-url a");
+
+      shortenButton.addEventListener("click", () => {
+        const longUrl = inputBox.value;
+
+        fetch("/shorturl", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          crossDomain: true,
+          body: JSON.stringify({ longUrl }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              shortUrlBox.href = data.url;
+              shortUrlBox.innerText = data.url;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    </script>
+  </body>
+</html>
