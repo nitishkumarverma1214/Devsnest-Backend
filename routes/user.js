@@ -53,12 +53,21 @@ router.post("/signup", async (req, res) => {
 router.post("/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!validateEmail(email)) {
+      return res.status(400).send("Invalid Email");
+    }
+    if (!validatePassword(password)) {
+      return res.status(400).send("Invalid username/password");
+    }
     const existingUser = await User.findOne({ where: { email } });
+
     if (!existingUser) {
       return res.status(400).json({ err: "User doesn't exists" });
     }
 
-    const passwordMatch = await bcrypt.compare(existingUser.password, password);
+    const passwordMatch = await bcrypt.compare(password, existingUser.password);
+
     if (!passwordMatch) {
       return res.status(400).json({ err: "email or password doesn't match" });
     }
@@ -66,9 +75,8 @@ router.post("/signin", async (req, res) => {
     const bearerToken = await jwt.sign(payload, "SECRETMESSAGE", {
       expiresIn: 360000,
     });
-    return res
-      .status(200)
-      .cookie("token", bearerToken, { expires: new Date() + 9999 });
+    res.cookie("token", bearerToken, { expires: new Date(Date.now() + 9999) });
+    res.status(200).json({ bearerToken });
   } catch (error) {
     console.log(error.message);
     return res.status(500).send("Something went wrong!!");
