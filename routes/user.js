@@ -83,6 +83,15 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get("/signout", () => {});
+router.get("/signout", async (req, res) => {
+  try {
+    res.clearCookie("token");
+
+    return res.status(200).json({ message: "cookie deleted" });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send("Something went wrong!!");
+  }
+});
 
 module.exports = router;
