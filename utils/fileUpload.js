@@ -20,7 +20,8 @@ const upload = multer({
     const fileTypes = new RegExp(/.png|.mp4|.gif|.jpg|.jpeg/);
     const mimeType = fileTypes.test(file.mimetype);
     const extname = fileTypes.test(path.extname(file.originalname));
-    if (extname && mineType) {
+    console.log(file);
+    if (extname && mimeType) {
       cb(null, true);
     } else {
       cb("Only image format supported");
