@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+
 const {
   validateEmail,
   validatePassword,
@@ -39,11 +40,8 @@ router.post("/signup", async (req, res) => {
       isSeller,
     };
     const newUser = await User.create(user);
-    if (existingUser) {
-      return res.status(403).json({ err: "User Already exists" });
-    }
 
-    return res.status(201).json({ message: `Welcome ${newUser.name}` });
+    return res.status(201).json({ message: `Welcome User` });
   } catch (error) {
     console.log(error.message);
     return res.status(500).send(error);
@@ -94,4 +92,14 @@ router.get("/signout", async (req, res) => {
   }
 });
 
+router.get("/all", async (req, res) => {
+  try {
+    const allUser = await User.findAll();
+
+    return res.status(200).json({ users: allUser });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send("Something went wrong!!");
+  }
+});
 module.exports = router;
