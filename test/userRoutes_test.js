@@ -14,7 +14,7 @@ describe("/POST testing user signup", () => {
       .post("/api/v1/user/signup")
       .send({
         name: "Seller231",
-        email: "Seller@mail.com",
+        email: "Seller@il.com",
         password: "Devs@12343",
       })
       .end((err, res) => {
